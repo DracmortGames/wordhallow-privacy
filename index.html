@@ -97,12 +97,20 @@
   <h2>3. Advertising (Google AdMob)</h2>
   <p>WordHallow shows interstitial ads between levels and optional rewarded ads (for example "+5 moves", a free Hint or a free Undo). Ads are provided by the Google Mobile Ads SDK (Google AdMob), operated by Google. When ads are requested and shown, Google's SDK collects and processes, according to Google's own disclosures:</p>
   <ul>
-    <li><strong>Device and other identifiers</strong>, such as the Android advertising ID and app set ID;</li>
+    <li><strong>Device and account identifiers</strong>, such as the Android advertising ID and app set ID;</li>
     <li><strong>Approximate location</strong>, derived from your IP address;</li>
     <li><strong>App interactions</strong>, such as ads viewed and tapped;</li>
     <li><strong>Diagnostics</strong>, such as information about crashes and performance of the SDK.</li>
   </ul>
-  <p>Google uses this information to serve and measure ads, prevent fraud and improve its services. Ads may be personalised based on your activity unless you opt out.</p>
+  <p>Google uses this information for advertising, analytics and fraud prevention, and it is sent to Google encrypted in transit. Ads may be personalised based on your activity unless you opt out.</p>
+  <h3>Android ad services (Privacy Sandbox)</h3>
+  <p>On Android devices that support it, the Google Mobile Ads SDK can also use Android's own ad services ("Privacy Sandbox"), which is why the app lists the <code>ACCESS_ADSERVICES_*</code> permissions in section 6. These system features are designed to make ads work with less cross-app tracking:</p>
+  <ul>
+    <li><strong>Ad ID from ad services</strong> &ndash; the advertising identifier provided through Android's ad services;</li>
+    <li><strong>Attribution reporting</strong> &ndash; lets Android measure whether an ad was seen or tapped and led to an action, without sharing a cross-app identifier;</li>
+    <li><strong>Topics</strong> &ndash; Android works out a few broad interest topics on your device from the apps you use, and an ad request may receive some of them for interest-based ads.</li>
+  </ul>
+  <p>You can review or turn these off in your phone's ad privacy settings (on recent Android versions: <em>Settings &rarr; Security &amp; privacy &rarr; Privacy &rarr; Ads</em>; the path varies by device).</p>
   <h3>Consent and your choices</h3>
   <ul>
     <li>If you are in the European Economic Area, the United Kingdom or Switzerland, the game shows Google's consent message (User Messaging Platform) before personalised ads are used, and you can make your choice there.</li>
@@ -112,6 +120,7 @@
 
   <h2>4. In-app purchases (Google Play and Unity IAP)</h2>
   <p>You can buy coins, Hint tokens and Undo tokens. Payments are handled entirely by <strong>Google Play</strong> under <a href="https://policies.google.com/privacy">Google's Privacy Policy</a>; we never receive your payment card, bank or billing details. The game receives only the product you bought and the store's transaction ID and receipt, which it uses to deliver your items once and stores on your device (see section 2).</p>
+  <p>The Google Play Billing Library talks to the Play Store app on your phone to show and complete purchases, and includes Google's data-transport component, which can send technical information about purchase flows to Google.</p>
   <p>Purchases go through the <strong>Unity In-App Purchasing</strong> library by Unity Technologies. When you start, complete or cancel a purchase, this library sends purchase event data to Unity, including:</p>
   <ul>
     <li>the product, its price and currency, and the store transaction ID;</li>
@@ -125,13 +134,18 @@
   <p>WordHallow is built with the Unity engine. In the released game, Unity Analytics, Unity's engine diagnostics and its crash and performance reporting are all turned off, and we do not add any other analytics or crash-reporting service. The only data that leaves your device is what the Google AdMob, Google Play and Unity In-App Purchasing services described above collect.</p>
 
   <h2>6. Android permissions</h2>
+  <p>These are all the permissions in the WordHallow app. Several are added automatically by the Google libraries the game uses; none of them gives access to your contacts, photos, microphone, camera or precise location.</p>
   <table>
-    <thead><tr><th>Permission</th><th>Why it is used</th></tr></thead>
+    <thead><tr><th>Permission</th><th>Added by</th><th>Why it is there</th></tr></thead>
     <tbody>
-      <tr><td>Internet and network state</td><td>To load ads and to talk to Google Play for purchases. The game itself is playable offline.</td></tr>
-      <tr><td>Advertising ID (<code>AD_ID</code>)</td><td>Used by Google AdMob for advertising, as described in section 3.</td></tr>
-      <tr><td>Google Play Billing</td><td>To make in-app purchases.</td></tr>
-      <tr><td>Vibration</td><td>Short haptic feedback during play. You can turn it off in the game's Settings.</td></tr>
+      <tr><td>Internet, network state</td><td>WordHallow</td><td>To load ads and to talk to Google Play for purchases. The game itself is playable offline.</td></tr>
+      <tr><td>Vibration</td><td>WordHallow</td><td>Short haptic feedback during play. You can turn it off in the game's Settings.</td></tr>
+      <tr><td>Advertising ID (<code>AD_ID</code>)</td><td>Google Mobile Ads SDK</td><td>Lets Google AdMob read the Android advertising ID for advertising, analytics and fraud prevention (section 3). You can reset or delete it in your phone's settings.</td></tr>
+      <tr><td>Ad services: <code>ACCESS_ADSERVICES_AD_ID</code>, <code>ACCESS_ADSERVICES_ATTRIBUTION</code>, <code>ACCESS_ADSERVICES_TOPICS</code></td><td>Google Mobile Ads SDK</td><td>Allow the ads SDK to use Android's Privacy Sandbox ad services where your phone supports them: the ad-services ad ID, attribution reporting for ad measurement, and on-device interest topics (section 3).</td></tr>
+      <tr><td>Google Play Billing (<code>BILLING</code>)</td><td>Google Play Billing Library</td><td>To make in-app purchases through Google Play (section 4).</td></tr>
+      <tr><td>Wake lock (<code>WAKE_LOCK</code>)</td><td>Google app-measurement API, included with the ads SDK</td><td>Declared by Google's measurement library for its background work, so it can keep the processor briefly awake to finish a task. Google Analytics for Firebase itself is not part of WordHallow. This does not keep your screen on and gives no access to personal data.</td></tr>
+      <tr><td>Foreground service (<code>FOREGROUND_SERVICE</code>)</td><td>Android WorkManager, used by the ads SDK</td><td>WorkManager schedules small background tasks for Google's libraries. A foreground service always shows a visible notification while it runs; WordHallow itself never starts one.</td></tr>
+      <tr><td><code>DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION</code></td><td>Android (AndroidX core)</td><td>An internal, app-only permission that stops other apps from sending messages to WordHallow's own components. It is not a request for access to anything on your phone.</td></tr>
     </tbody>
   </table>
 
